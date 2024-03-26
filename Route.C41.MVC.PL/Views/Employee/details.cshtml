@@ -1,0 +1,41 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "details";
+}
+
+<h1>details</h1>
+
+<br />
+<br />
+
+<form action="/Employee/Create" method="post">
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="gen"></label>
+        <input asp-for="gen" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="hirringDate"></label>
+        <input asp-for="hirringDate" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <input asp-for="isActive" type="checkbox" readonly />
+        <label class="col-form-label" asp-for="isActive"></label>
+    </div>
+    <a asp-action="Index" class="btn btn-light">Back To List</a>
+</form>

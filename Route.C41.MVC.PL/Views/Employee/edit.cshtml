@@ -1,0 +1,50 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "edit";
+}
+
+<h1>edit</h1>
+
+<br />
+<br />
+
+
+<form asp-action="edit">
+    <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Age"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="gen"></label>
+            <input asp-for="gen" class="form-control" />
+            <span asp-validation-for="gen" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="hirringDate"></label>
+            <input asp-for="hirringDate" class="form-control" />
+            <span asp-validation-for="hirringDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="isActive" type="checkbox" />
+            <label class="col-form-label" asp-for="isActive"></label>
+        </div>
+    <input type="submit" value="save" class="btn btn-primary" />|
+    <a asp-action="Index" class="btn btn-light">cancle</a>
+</form>
