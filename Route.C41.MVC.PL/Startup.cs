@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Route.C41.MVC.BLL.IGeniricRepo;
+using Route.C41.MVC.BLL.repoes;
 using Route.C41.MVC.DAL.Data;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,8 @@ namespace Route.C41.MVC.PL
             {
                 option.UseSqlServer(configuration.GetConnectionString("defult"));
             });
+            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
