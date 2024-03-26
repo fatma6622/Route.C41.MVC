@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Employee>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>All Employess</h1>
+<br />
+<br />
+
+<a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-hover table-striped">
+        <thead>
+        <th>@Html.DisplayNameFor(e => e.Name)</th>
+        <th>@Html.DisplayNameFor(e => e.Age)</th>
+        <th>@Html.DisplayNameFor(e => e.Address)</th>
+        <th>@Html.DisplayNameFor(e => e.Email)</th>
+        <th>@Html.DisplayNameFor(e => e.isActive)</th>
+        <th>Gender</th>
+        <th>@Html.DisplayNameFor(e => e.hirringDate)</th>
+        <th>Details</th>
+        <th>Update</th>
+        <th>Delete</th>
+        </thead>
+        <tbody>
+            @foreach(var e in Model)
+            {
+                <tr>
+                    <td>@e.Name</td>
+                    <td>@e.Age</td>
+                    <td>@e.Address</td>
+                    <td>@e.Email</td>
+                    <td>@e.isActive</td>
+                    <td>@e.gen</td>
+                    <td>@e.hirringDate</td>
+                    <td>
+                        <a asp-controller="Employee" asp-action="Details" asp-route-id="@e.Id" class="btn btn-warning">
+                            <i class="fas fa-eye"></i>Details
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-controller="Employee" asp-action="edit" asp-route-id="@e.Id" class="btn btn-success">
+                            <i class="fas fa-edit"></i>Update
+                        </a>
+                    </td>
+                    <td>
+                        
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Delete
+                        </button>
+
+                        
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Understood</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="mt-4 alert alert-warning">
+        <h3>No Employee</h3>
+    </div>
+}
+
