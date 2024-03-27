@@ -1,7 +1,9 @@
 ﻿@model Employee
 
-
-
+@inject IDepartmentRepo _departmentRepo
+@{
+    var departments = new SelectList(_departmentRepo.GetAll(), nameof(Department.Id), nameof(Department.Name));
+}
 <div class="form-group">
     <label class="col-form-label" asp-for="Name"></label>
     <input asp-for="Name" class="form-control" />
@@ -35,4 +37,10 @@
 <div class="form-group">
     <input asp-for="isActive" type="checkbox" />
     <label class="col-form-label" asp-for="isActive"></label>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="Department"></label>
+    <select class="form-control" asp-for="DepartmentId" asp-items="@departments">
+        <option value="@null">-- Select Department --</option>
+    </select>
 </div>
