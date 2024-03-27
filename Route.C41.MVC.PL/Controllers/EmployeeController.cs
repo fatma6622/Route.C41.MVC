@@ -40,8 +40,14 @@ namespace Route.C41.MVC.PL.Controllers
                 var count = _employeeRepo.Add(employee);
                 if (count > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["massage"] = "created successfully";
                 }
+                else
+                {
+                    TempData["massage"] = "not created";
+                }
+                return RedirectToAction(nameof(Index));
+
 
             }
             return View(employee);

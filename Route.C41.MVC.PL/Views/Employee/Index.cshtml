@@ -13,6 +13,14 @@
     <h5>@ViewBag.massage</h5>
 </div> *@
 
+
+@if (!string.IsNullOrEmpty(TempData["massage"] as string))
+{
+    <div class="mt-4 alert alert-success">
+        <h5>@TempData["massage"]</h5>
+    </div>
+
+}
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
 
 @if (Model.Count() > 0)
