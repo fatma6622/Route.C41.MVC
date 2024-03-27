@@ -43,6 +43,9 @@ namespace Route.C41.MVC.DAL.Models
         public empType employeeType { get; set; }
         public DateTime creationDate { get; set; }= DateTime.Now;
         public bool isDeleted { get; set; } = false;
+        public int? DepartmentId { get; set; }
+
+        public Department Department { get; set; }
 
     }
 }
