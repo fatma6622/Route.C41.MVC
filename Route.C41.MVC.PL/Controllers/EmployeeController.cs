@@ -9,50 +9,50 @@ namespace Route.C41.MVC.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepo _EmployeeRepo;
+        private readonly IEmployeeRepo _employeeRepo;
 
         public IWebHostEnvironment Env { get; }
 
-        public EmployeeController(IEmployeeRepo EmployeeRepo, IWebHostEnvironment env)
+        public EmployeeController(IEmployeeRepo employeeRepo, IWebHostEnvironment env)
         {
-            _EmployeeRepo = EmployeeRepo;
+            _employeeRepo = employeeRepo;
             Env = env;
         }
         public IActionResult Index()
         {
-            var Employee = _EmployeeRepo.GetAll();
-            return View(Employee);
+            var department = _employeeRepo.GetAll();
+            return View(department);
         }
         [HttpGet]
         public IActionResult Create()
         {
 
-            return View("Create");
+            return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee Employee)
+        public IActionResult Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
-                var count = _EmployeeRepo.Add(Employee);
+                var count = _employeeRepo.Add(employee);
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
 
             }
-            return View(Employee);
+            return View(employee);
         }
         [HttpGet]
         public IActionResult details(int? id, string view = "details")
         {
             if (!id.HasValue)
                 return BadRequest();
-            var Employee = _EmployeeRepo.Get(id.Value);
-            if (Employee == null)
+            var employee = _employeeRepo.Get(id.Value);
+            if (employee == null)
                 return NotFound();
 
-            return View(view, Employee);
+            return View(view, employee);
         }
         [HttpGet]
         public IActionResult edit(int? id)
@@ -62,15 +62,15 @@ namespace Route.C41.MVC.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult edit([FromRoute] int Id, Employee Employee)
+        public IActionResult edit([FromRoute] int Id, Employee employee)
         {
-            if (Id != Employee.Id)
+            if (Id != employee.Id)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest();
             try
             {
-                _EmployeeRepo.Update(Employee);
+                _employeeRepo.Update(employee);
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace Route.C41.MVC.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "updating error");
                 }
-                return View(Employee);
+                return View(employee);
             }
         }
         [HttpGet]
@@ -93,13 +93,13 @@ namespace Route.C41.MVC.PL.Controllers
             return details(id, "delete");
         }
         [HttpPost]
-        public IActionResult delete(Employee Employee)
+        public IActionResult delete(Employee employee)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
             try
             {
-                _EmployeeRepo.Delete(Employee);
+                _employeeRepo.Delete(employee);
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -112,7 +112,7 @@ namespace Route.C41.MVC.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "deleting error");
                 }
-                return View(Employee);
+                return View(employee);
             }
         }
     }
