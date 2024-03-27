@@ -20,6 +20,9 @@ namespace Route.C41.MVC.PL.Controllers
         }
         public IActionResult Index()
         {
+            //Binding
+            ViewData["massage"] = "hello viewData";
+            ViewBag.massage = "hello viewBag";
             var department = _employeeRepo.GetAll();
             return View(department);
         }
@@ -100,7 +103,7 @@ namespace Route.C41.MVC.PL.Controllers
             try
             {
                 _employeeRepo.Delete(employee);
-                return RedirectToAction("index");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
