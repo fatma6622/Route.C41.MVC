@@ -38,7 +38,14 @@ namespace Route.C41.MVC.BLL.repoes
 
         public IEnumerable<T> GetAll()
         {
-            return dbContext.Set<T>().AsNoTracking().ToList();
+            if (typeof(T) == typeof(Employee))
+            {
+                return (IEnumerable<T>) dbContext.Employees.Include(e=>e.Department).ToList();
+            }
+            else
+            {
+                return dbContext.Set<T>().AsNoTracking().ToList();
+            }
         }
 
         public int Update(T entity)
