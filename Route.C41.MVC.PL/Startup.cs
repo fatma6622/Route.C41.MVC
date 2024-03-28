@@ -9,6 +9,7 @@ using Route.C41.MVC.BLL.IGeniricRepo;
 using Route.C41.MVC.BLL.repoes;
 using Route.C41.MVC.DAL.Data;
 using Route.C41.MVC.PL.Extentions;
+using Route.C41.MVC.PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace Route.C41.MVC.PL
             services.AddScoped<IDepartmentRepo, DepartmentRepo>();
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             //ApplicationServiesExtentions.AddApplicationServices(services);//static
+            services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
