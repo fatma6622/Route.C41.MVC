@@ -7,7 +7,14 @@
 <br />
 <br />
 
+@if (!string.IsNullOrEmpty(TempData["massage"] as string))
+{
+    <div class="mt-4 alert alert-success">
+        <h5>@TempData["massage"]</h5>
+    </div>
 
+}
+<a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
 <a asp-controller="Department" asp-action="Create" class="btn btn-primary">Create New Department</a>
 
 <br />

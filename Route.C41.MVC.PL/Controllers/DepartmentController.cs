@@ -35,10 +35,15 @@ namespace Route.C41.MVC.PL.Controllers
             if(ModelState.IsValid)
             {
                 var count=_departmentRepo.Add(department);
-                if(count>0)
+                if (count > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["massage"] = "created successfully";
                 }
+                else
+                {
+                    TempData["massage"] = "not created";
+                }
+                return RedirectToAction(nameof(Index));
 
             }
             return View(department);

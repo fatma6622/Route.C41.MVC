@@ -104,8 +104,8 @@ namespace Route.C41.MVC.PL.Controllers
         [HttpPost]
         public IActionResult delete(Employee employee)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
+            //if (!ModelState.IsValid)
+            //    return BadRequest();
             try
             {
                 _employeeRepo.Delete(employee);
