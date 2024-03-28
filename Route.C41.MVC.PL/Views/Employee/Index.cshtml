@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee>
+﻿@model IEnumerable<EmployeeViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -6,23 +6,51 @@
 <h1>All Employess</h1>
 <br />
 <br />
+@* <div class="mt-4 alert alert-warning">
+    <h5>@ViewData["massage"]</h5>
+</div>
+<div class="mt-4 alert alert-success">
+    <h5>@ViewBag.massage</h5>
+</div> *@
 
+
+@* @if (!string.IsNullOrEmpty(TempData["massage"] as string))
+{
+    <div class="mt-4 alert alert-success">
+        <h5>@TempData["massage"]</h5>
+    </div>
+
+} *@
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
+
+
+<div class="row justify-content-center align-items-center mt-5 mb-2"> 
+    <form asp-action="Index" class="row col-8 offset-2">
+        <div class="col-8">
+            <input type="text" class="form-control" id="searchInp" name="searchInp" placeholder="Search By Name" />
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </div>
+    </form>
+</div>
 
 @if (Model.Count() > 0)
 {
     <table class="table table-hover table-striped">
         <thead>
-        <th>@Html.DisplayNameFor(e => e.Name)</th>
-        <th>@Html.DisplayNameFor(e => e.Age)</th>
-        <th>@Html.DisplayNameFor(e => e.Address)</th>
-        <th>@Html.DisplayNameFor(e => e.Email)</th>
-        <th>@Html.DisplayNameFor(e => e.isActive)</th>
-        <th>Gender</th>
-        <th>@Html.DisplayNameFor(e => e.hirringDate)</th>
-        <th>Details</th>
-        <th>Update</th>
-        <th>Delete</th>
+            <tr>
+                <th>@Html.DisplayNameFor(e => e.Name)</th>
+                <th>@Html.DisplayNameFor(e => e.Age)</th>
+                <th>Department</th>
+                <th>@Html.DisplayNameFor(e => e.Address)</th>
+                <th>@Html.DisplayNameFor(e => e.Email)</th>
+                <th>Gender</th>
+                <th>@Html.DisplayNameFor(e => e.hirringDate)</th>
+                <th>Details</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
         </thead>
         <tbody>
             @foreach(var e in Model)
@@ -30,46 +58,12 @@
                 <tr>
                     <td>@e.Name</td>
                     <td>@e.Age</td>
+                    <td>@e.Department?.Name</td>
                     <td>@e.Address</td>
                     <td>@e.Email</td>
-                    <td>@e.isActive</td>
                     <td>@e.gen</td>
                     <td>@e.hirringDate</td>
-                    <td>
-                        <a asp-controller="Employee" asp-action="Details" asp-route-id="@e.Id" class="btn btn-warning">
-                            <i class="fas fa-eye"></i>Details
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-controller="Employee" asp-action="edit" asp-route-id="@e.Id" class="btn btn-success">
-                            <i class="fas fa-edit"></i>Update
-                        </a>
-                    </td>
-                    <td>
-                        
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Delete
-                        </button>
-
-                        
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Understood</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
+                    <partial name="_ButtonsPartial" model="@e.Id"></partial>
                 </tr>
             }
         </tbody>

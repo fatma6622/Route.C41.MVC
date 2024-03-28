@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<DepartmentViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,7 +7,14 @@
 <br />
 <br />
 
+@if (!string.IsNullOrEmpty(TempData["massage"] as string))
+{
+    <div class="mt-4 alert alert-success">
+        <h5>@TempData["massage"]</h5>
+    </div>
 
+}
+<a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
 <a asp-controller="Department" asp-action="Create" class="btn btn-primary">Create New Department</a>
 
 <br />
@@ -32,23 +39,9 @@
                     <td>@dept.Code</td>
                     <td>@dept.Name</td>
                     <td>@dept.DateOfCreation</td>
-                    <td>
-                        <a asp-controller="Department" asp-action="Details" asp-route-id="@dept.Id" class="btn btn-warning">
-                            <i class="fas fa-eye"></i>Details
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-controller="Department" asp-action="edit" asp-route-id="@dept.Id" class="btn btn-success">
-                            <i class="fas fa-edit"></i>Update
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-controller="Department" asp-action="delete" asp-route-id="@dept.Id" class="btn btn-danger">
-                            <i class="fas fa-trash"></i>Delete
-                        </a>
-                    </td>
+                    <partial name="_ButtonsPartial" model="@dept.Id"></partial>
                 
-            </tr>
+                </tr>
             }
         </tbody>
     </table>

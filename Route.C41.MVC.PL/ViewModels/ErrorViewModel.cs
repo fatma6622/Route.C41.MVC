@@ -1,6 +1,6 @@
 using System;
 
-namespace Route.C41.MVC.PL.Models
+namespace Route.C41.MVC.PL.ViewModels
 {
     public class ErrorViewModel
     {

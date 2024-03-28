@@ -1,6 +1,14 @@
-﻿@model Employee
+﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "delete";
 }
 
 <h1>delete</h1>
+<br />
+<br />
+<h4>Are you sure?</h4>
+
+<form asp-action="delete">
+    <input type="submit" value="Yes" class="btn btn-primary" />|
+    <a asp-action="Index" class="btn btn-light">cancle</a>
+</form>

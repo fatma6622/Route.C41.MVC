@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Route.C41.MVC.PL.Models;
+using Route.C41.MVC.PL.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

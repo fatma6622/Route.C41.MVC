@@ -1,58 +1,101 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
 using Route.C41.MVC.DAL.Models;
+using Route.C41.MVC.PL.ViewModels;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Route.C41.MVC.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepo _EmployeeRepo;
+        private readonly IMapper mapper;
+        private readonly IEmployeeRepo _employeeRepo;
 
         public IWebHostEnvironment Env { get; }
 
-        public EmployeeController(IEmployeeRepo EmployeeRepo, IWebHostEnvironment env)
+        public EmployeeController(IMapper mapper,IEmployeeRepo employeeRepo, IWebHostEnvironment env)
         {
-            _EmployeeRepo = EmployeeRepo;
+            this.mapper = mapper;
+            _employeeRepo = employeeRepo;
             Env = env;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchInp)
         {
-            var Employee = _EmployeeRepo.GetAll();
-            return View(Employee);
+            var employees=Enumerable.Empty<Employee>();
+            if (string.IsNullOrEmpty(searchInp))
+            {
+                //Binding
+                //ViewData["massage"] = "hello viewData";
+                //ViewBag.massage = "hello viewBag";
+                employees = _employeeRepo.GetAll();
+            }
+            else
+            {
+                employees= _employeeRepo.GetByName(searchInp.ToLower());
+            }
+            var mappedEmps = mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            return View(mappedEmps);
+
         }
         [HttpGet]
         public IActionResult Create()
         {
 
-            return View("Create");
+            return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee Employee)
+        public IActionResult Create(EmployeeViewModel employeeVM)
         {
             if (ModelState.IsValid)
             {
-                var count = _EmployeeRepo.Add(Employee);
+                //manual mapping
+                //var mappedEmp = new Employee()
+                //{
+                //    Name = employeeVM.Name,
+                //    Age = employeeVM.Age,
+                //    Address = employeeVM.Address,
+                //    salary = employeeVM.salary,
+                //    Email = employeeVM.Email,
+                //    phone = employeeVM.phone,
+                //    isActive = employeeVM.isActive,
+                //    hirringDate = employeeVM.hirringDate
+                //};
+                //Employee mappedEmp =(Employee) employeeVM;
+
+                var mappedEmp= mapper.Map<EmployeeViewModel,Employee>(employeeVM);
+
+                var count = _employeeRepo.Add(mappedEmp);
                 if (count > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["massage"] = "created successfully";
                 }
+                else
+                {
+                    TempData["massage"] = "not created";
+                }
+                return RedirectToAction(nameof(Index));
+
 
             }
-            return View(Employee);
+            return View(employeeVM);
         }
         [HttpGet]
         public IActionResult details(int? id, string view = "details")
         {
             if (!id.HasValue)
                 return BadRequest();
-            var Employee = _EmployeeRepo.Get(id.Value);
-            if (Employee == null)
+            var employee = _employeeRepo.Get(id.Value);
+            var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
+            if (employee == null)
                 return NotFound();
 
-            return View(view, Employee);
+            return View(view, mappedEmp);
         }
         [HttpGet]
         public IActionResult edit(int? id)
@@ -62,15 +105,16 @@ namespace Route.C41.MVC.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult edit([FromRoute] int Id, Employee Employee)
+        public IActionResult edit([FromRoute] int Id, EmployeeViewModel employeeVM)
         {
-            if (Id != Employee.Id)
+            if (Id != employeeVM .Id)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest();
             try
             {
-                _EmployeeRepo.Update(Employee);
+                var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+                _employeeRepo.Update(mappedEmp);
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -83,7 +127,7 @@ namespace Route.C41.MVC.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "updating error");
                 }
-                return View(Employee);
+                return View(employeeVM);
             }
         }
         [HttpGet]
@@ -93,14 +137,15 @@ namespace Route.C41.MVC.PL.Controllers
             return details(id, "delete");
         }
         [HttpPost]
-        public IActionResult delete(Employee Employee)
+        public IActionResult delete(EmployeeViewModel employeeVM)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
+            //if (!ModelState.IsValid)
+            //    return BadRequest();
             try
             {
-                _EmployeeRepo.Delete(Employee);
-                return RedirectToAction("index");
+                var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+                _employeeRepo.Delete(mappedEmp);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -112,7 +157,7 @@ namespace Route.C41.MVC.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "deleting error");
                 }
-                return View(Employee);
+                return View(employeeVM);
             }
         }
     }

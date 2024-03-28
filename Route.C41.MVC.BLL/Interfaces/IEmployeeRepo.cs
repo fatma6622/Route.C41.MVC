@@ -10,5 +10,6 @@ namespace Route.C41.MVC.BLL.IGeniricRepo
     public interface  IEmployeeRepo:IGeniricRepo<Employee>
     {
         IQueryable<Employee> GetByAddress(string Address);
+        IQueryable<Employee> GetByName(string searchInp);
     }
 }

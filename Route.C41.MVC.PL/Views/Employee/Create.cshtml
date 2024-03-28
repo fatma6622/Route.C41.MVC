@@ -1,4 +1,4 @@
-﻿@model Employee
+﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -10,40 +10,7 @@
 
 
 <form action="/Employee/Create" method="post">
-    <div class="form-group">
-        <label class="col-form-label" asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label" asp-for="Age"></label>
-        <input asp-for="Age" class="form-control" />
-        <span asp-validation-for="Age" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label" asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label" asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-        <div class="form-group">
-        <label class="col-form-label" asp-for="gen"></label>
-        <input asp-for="gen" class="form-control" />
-        <span asp-validation-for="gen" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label" asp-for="hirringDate"></label>
-        <input asp-for="hirringDate" class="form-control" />
-        <span asp-validation-for="hirringDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input asp-for="isActive" type="checkbox" />
-        <label class="col-form-label" asp-for="isActive"></label>
-    </div>
+    <partial name="shared/CreateEditEmployeePartial"></partial>
     <input type="submit" value="Create" class="btn btn-primary" />|
     <a asp-action="Index" class="btn btn-light">Back To List</a>
 </form>

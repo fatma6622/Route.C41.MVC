@@ -15,6 +15,10 @@ namespace Route.C41.MVC.DAL.Data.Configrations
         {
             builder.Property(d=>d.Id).UseIdentityColumn(10,10);
             builder.Property(d=>d.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.HasMany(D => D.Employees)
+                .WithOne(E => E.Department)
+                .HasForeignKey(E => E.DepartmentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

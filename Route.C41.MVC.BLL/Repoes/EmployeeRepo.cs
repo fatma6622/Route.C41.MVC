@@ -20,5 +20,10 @@ namespace Route.C41.MVC.BLL.repoes
         {
             return dbContext.Employees.Where(e=>e.Address.ToLower()== Address.ToLower());
         }
+            
+        public IQueryable<Employee> GetByName(string searchInp)
+        {
+            return dbContext.Employees.Where(E => E.Name.ToLower().Contains(searchInp));
+        }
     }
 }
