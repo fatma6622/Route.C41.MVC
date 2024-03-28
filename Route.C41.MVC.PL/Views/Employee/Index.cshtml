@@ -14,14 +14,26 @@
 </div> *@
 
 
-@if (!string.IsNullOrEmpty(TempData["massage"] as string))
+@* @if (!string.IsNullOrEmpty(TempData["massage"] as string))
 {
     <div class="mt-4 alert alert-success">
         <h5>@TempData["massage"]</h5>
     </div>
 
-}
+} *@
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create Employee</a>
+
+
+<div class="row justify-content-center align-items-center mt-5 mb-2"> 
+    <form asp-action="Index" class="row col-8 offset-2">
+        <div class="col-8">
+            <input type="text" class="form-control" id="searchInp" name="searchInp" placeholder="Search By Name" />
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </div>
+    </form>
+</div>
 
 @if (Model.Count() > 0)
 {

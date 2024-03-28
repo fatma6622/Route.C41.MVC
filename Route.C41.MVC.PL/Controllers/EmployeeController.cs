@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
 using Route.C41.MVC.DAL.Models;
 using System;
+using System.Linq;
 
 namespace Route.C41.MVC.PL.Controllers
 {
@@ -18,13 +19,22 @@ namespace Route.C41.MVC.PL.Controllers
             _employeeRepo = employeeRepo;
             Env = env;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchInp)
         {
-            //Binding
-            ViewData["massage"] = "hello viewData";
-            ViewBag.massage = "hello viewBag";
-            var department = _employeeRepo.GetAll();
-            return View(department);
+            var employees=Enumerable.Empty<Employee>();
+            if (string.IsNullOrEmpty(searchInp))
+            {
+                //Binding
+                //ViewData["massage"] = "hello viewData";
+                //ViewBag.massage = "hello viewBag";
+                employees = _employeeRepo.GetAll();
+            }
+            else
+            {
+                employees= _employeeRepo.GetByName(searchInp.ToLower());
+            }
+            return View(employees);
+
         }
         [HttpGet]
         public IActionResult Create()
