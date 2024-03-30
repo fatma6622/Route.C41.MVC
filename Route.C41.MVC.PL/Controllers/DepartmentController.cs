@@ -31,7 +31,7 @@ namespace Route.C41.MVC.PL.Controllers
         }
         public IActionResult Index()
         {
-            var departments = _unitOfWork.departmentRepo.GetAll();
+            var departments = _unitOfWork.Repo<Department>().GetAll();
             var mappedDepts = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
             return View(mappedDepts);
         }
@@ -47,7 +47,7 @@ namespace Route.C41.MVC.PL.Controllers
             if(ModelState.IsValid)
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-                _unitOfWork.departmentRepo.Add(mappedDept);
+                _unitOfWork.Repo<Department>().Add(mappedDept);
                 var count = _unitOfWork.complete();
                 if (count > 0)
                 {
@@ -67,7 +67,7 @@ namespace Route.C41.MVC.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest();
-            var department= _unitOfWork.departmentRepo.Get(id.Value);
+            var department= _unitOfWork.Repo<Department>().Get(id.Value);
             var mappedDept = mapper.Map<Department, DepartmentViewModel>(department);
 
             if (department==null)
@@ -93,7 +93,7 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _unitOfWork.departmentRepo.Update(mappedDept);
+                _unitOfWork.Repo<Department>().Update(mappedDept);
                 _unitOfWork.complete();
                 return RedirectToAction("index");
             }
@@ -125,7 +125,7 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _unitOfWork.departmentRepo.Delete(mappedDept);
+                _unitOfWork.Repo<Department>().Delete(mappedDept);
                 _unitOfWork.complete();
                 return RedirectToAction("index");
             }

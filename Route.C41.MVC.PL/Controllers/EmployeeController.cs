@@ -33,16 +33,17 @@ namespace Route.C41.MVC.PL.Controllers
         public IActionResult Index(string searchInp)
         {
             var employees=Enumerable.Empty<Employee>();
+            var employeeRepo = _unitOfWork.Repo<Employee>() as IEmployeeRepo;
             if (string.IsNullOrEmpty(searchInp))
             {
                 //Binding
                 //ViewData["massage"] = "hello viewData";
                 //ViewBag.massage = "hello viewBag";
-                employees = _unitOfWork.employeeRepo.GetAll();
+                employees = employeeRepo.GetAll();
             }
             else
             {
-                employees= _unitOfWork.employeeRepo.GetByName(searchInp.ToLower());
+                employees= employeeRepo.GetByName(searchInp.ToLower());
             }
             var mappedEmps = mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(mappedEmps);
@@ -75,7 +76,7 @@ namespace Route.C41.MVC.PL.Controllers
 
                 var mappedEmp= mapper.Map<EmployeeViewModel,Employee>(employeeVM);
 
-                 _unitOfWork.employeeRepo.Add(mappedEmp);
+                 _unitOfWork.Repo<Employee>().Add(mappedEmp);
 
                 var count = _unitOfWork.complete();
                 if (count > 0)
@@ -97,7 +98,7 @@ namespace Route.C41.MVC.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest();
-            var employee = _unitOfWork.employeeRepo.Get(id.Value);
+            var employee = _unitOfWork.Repo<Employee>().Get(id.Value);
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
             if (employee == null)
                 return NotFound();
@@ -121,7 +122,7 @@ namespace Route.C41.MVC.PL.Controllers
             try
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                _unitOfWork.employeeRepo.Update(mappedEmp);
+                _unitOfWork.Repo<Employee>().Update(mappedEmp);
                 _unitOfWork.complete();
                 return RedirectToAction("index");
             }
@@ -152,7 +153,7 @@ namespace Route.C41.MVC.PL.Controllers
             try
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                _unitOfWork.employeeRepo.Delete(mappedEmp);
+                _unitOfWork.Repo<Employee>().Delete(mappedEmp);
                 _unitOfWork.complete();
                 return RedirectToAction("Index");
             }
