@@ -11,9 +11,9 @@ namespace Route.C41.MVC.BLL.IGeniricRepo
     {
         IEnumerable<T> GetAll();
         T Get(int Id);
-        int Update(T entity);
-        int Delete(T entity);
-        int Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+        void Add(T entity);
 
     }
 }

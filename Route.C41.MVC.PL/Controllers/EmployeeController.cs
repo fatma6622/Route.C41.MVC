@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
+using Route.C41.MVC.BLL.Interfaces;
 using Route.C41.MVC.DAL.Models;
 using Route.C41.MVC.PL.ViewModels;
 using System;
@@ -15,14 +16,18 @@ namespace Route.C41.MVC.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IEmployeeRepo _employeeRepo;
+        private readonly IUnitOfWork _unitOfWork;
+        //private readonly IEmployeeRepo _employeeRepo;
 
         public IWebHostEnvironment Env { get; }
 
-        public EmployeeController(IMapper mapper,IEmployeeRepo employeeRepo, IWebHostEnvironment env)
+        public EmployeeController(IMapper mapper,/*IEmployeeRepo employeeRepo*/
+            IUnitOfWork unitOfWork
+            , IWebHostEnvironment env)
         {
             this.mapper = mapper;
-            _employeeRepo = employeeRepo;
+            _unitOfWork = unitOfWork;
+            //_employeeRepo = employeeRepo;
             Env = env;
         }
         public IActionResult Index(string searchInp)
@@ -33,11 +38,11 @@ namespace Route.C41.MVC.PL.Controllers
                 //Binding
                 //ViewData["massage"] = "hello viewData";
                 //ViewBag.massage = "hello viewBag";
-                employees = _employeeRepo.GetAll();
+                employees = _unitOfWork.employeeRepo.GetAll();
             }
             else
             {
-                employees= _employeeRepo.GetByName(searchInp.ToLower());
+                employees= _unitOfWork.employeeRepo.GetByName(searchInp.ToLower());
             }
             var mappedEmps = mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(mappedEmps);
@@ -70,7 +75,9 @@ namespace Route.C41.MVC.PL.Controllers
 
                 var mappedEmp= mapper.Map<EmployeeViewModel,Employee>(employeeVM);
 
-                var count = _employeeRepo.Add(mappedEmp);
+                 _unitOfWork.employeeRepo.Add(mappedEmp);
+
+                var count = _unitOfWork.complete();
                 if (count > 0)
                 {
                     TempData["massage"] = "created successfully";
@@ -90,7 +97,7 @@ namespace Route.C41.MVC.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest();
-            var employee = _employeeRepo.Get(id.Value);
+            var employee = _unitOfWork.employeeRepo.Get(id.Value);
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
             if (employee == null)
                 return NotFound();
@@ -114,7 +121,8 @@ namespace Route.C41.MVC.PL.Controllers
             try
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                _employeeRepo.Update(mappedEmp);
+                _unitOfWork.employeeRepo.Update(mappedEmp);
+                _unitOfWork.complete();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -144,7 +152,8 @@ namespace Route.C41.MVC.PL.Controllers
             try
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                _employeeRepo.Delete(mappedEmp);
+                _unitOfWork.employeeRepo.Delete(mappedEmp);
+                _unitOfWork.complete();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

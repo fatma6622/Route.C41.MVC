@@ -19,16 +19,14 @@ namespace Route.C41.MVC.BLL.repoes
             this.dbContext = dbContext;
         }
 
-        public int Add(T entity)
+        public void Add(T entity)
         {
             dbContext.Set<T>().Add(entity);
-            return dbContext.SaveChanges();
         }
 
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             dbContext.Set<T>().Remove(entity);
-            return dbContext.SaveChanges();
         }
 
         public T Get(int Id)
@@ -48,10 +46,9 @@ namespace Route.C41.MVC.BLL.repoes
             }
         }
 
-        public int Update(T entity)
+        public void Update(T entity)
         {
             dbContext.Set<T>().Update(entity);
-            return dbContext.SaveChanges();
         }
     }
 }

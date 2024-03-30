@@ -38,9 +38,10 @@ namespace Route.C41.MVC.PL
             {
                 option.UseSqlServer(configuration.GetConnectionString("defult"));
             }/*,ServiceLifetime.Scoped*/)/*.AddApplicationServices()*/;
-            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
-            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+            //services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            //services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             //ApplicationServiesExtentions.AddApplicationServices(services);//static
+            services.AddApplicationServices();
             services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
         }
 

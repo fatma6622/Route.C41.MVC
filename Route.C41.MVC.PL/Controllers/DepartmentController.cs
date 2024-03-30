@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
+using Route.C41.MVC.BLL.Interfaces;
 using Route.C41.MVC.DAL.Models;
 using Route.C41.MVC.PL.ViewModels;
 using System;
@@ -13,19 +14,24 @@ namespace Route.C41.MVC.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IDepartmentRepo _departmentRepo;
+        private readonly IUnitOfWork _unitOfWork;
+
+        //private readonly IDepartmentRepo _departmentRepo;
 
         public IWebHostEnvironment Env { get; }
 
-        public DepartmentController(IMapper mapper, IDepartmentRepo departmentRepo,IWebHostEnvironment env)
+        public DepartmentController(IMapper mapper, 
+            IUnitOfWork unitOfWork
+            ,IWebHostEnvironment env)
         {
             this.mapper = mapper;
-            _departmentRepo =departmentRepo;
+            _unitOfWork = unitOfWork;
+            //_departmentRepo =departmentRepo;
             Env = env;
         }
         public IActionResult Index()
         {
-            var departments = _departmentRepo.GetAll();
+            var departments = _unitOfWork.departmentRepo.GetAll();
             var mappedDepts = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
             return View(mappedDepts);
         }
@@ -41,7 +47,8 @@ namespace Route.C41.MVC.PL.Controllers
             if(ModelState.IsValid)
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-                var count=_departmentRepo.Add(mappedDept);
+                _unitOfWork.departmentRepo.Add(mappedDept);
+                var count = _unitOfWork.complete();
                 if (count > 0)
                 {
                     TempData["massage"] = "created successfully";
@@ -60,7 +67,7 @@ namespace Route.C41.MVC.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest();
-            var department=_departmentRepo.Get(id.Value);
+            var department= _unitOfWork.departmentRepo.Get(id.Value);
             var mappedDept = mapper.Map<Department, DepartmentViewModel>(department);
 
             if (department==null)
@@ -86,7 +93,8 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _departmentRepo.Update(mappedDept);
+                _unitOfWork.departmentRepo.Update(mappedDept);
+                _unitOfWork.complete();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -117,7 +125,8 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _departmentRepo.Delete(mappedDept);
+                _unitOfWork.departmentRepo.Delete(mappedDept);
+                _unitOfWork.complete();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
