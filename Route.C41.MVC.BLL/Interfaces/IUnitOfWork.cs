@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Route.C41.MVC.BLL.Interfaces
 {
-    public interface IUnitOfWork: IDisposable
+    public interface IUnitOfWork: IAsyncDisposable
     {
         //public IEmployeeRepo employeeRepo { get; set; }
         //public IDepartmentRepo departmentRepo { get; set; }
 
         IGeniricRepo<T> Repo<T>() where T:ModelBase;
-        int complete();
+        Task<int> complete();
     }
 }

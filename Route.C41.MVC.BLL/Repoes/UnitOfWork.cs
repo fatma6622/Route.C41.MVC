@@ -49,13 +49,13 @@ namespace Route.C41.MVC.BLL.Repoes
 
             return _Repos[key] as IGeniricRepo<T>;
         }
-        public int complete()
+        public async Task<int> complete()
         {
-            return _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync();
         }
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            _dbContext.Dispose();
+            await _dbContext.DisposeAsync();
         }
     }
 }

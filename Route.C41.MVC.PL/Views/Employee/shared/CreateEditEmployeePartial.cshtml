@@ -2,7 +2,7 @@
 
 @inject IUnitOfWork _unitOfWork
 @{
-    var departments = new SelectList(_unitOfWork.Repo<Department>().GetAll(), nameof(Department.Id), nameof(Department.Name));
+    var departments = new SelectList(await _unitOfWork.Repo<Department>().GetAllAsync(), nameof(Department.Id), nameof(Department.Name));
 }
 <div class="form-group">
     <label class="col-form-label" asp-for="Name"></label>
