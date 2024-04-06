@@ -2,6 +2,7 @@
 using static Route.C41.MVC.DAL.Models.Employee;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Route.C41.MVC.PL.ViewModels
 {
@@ -32,5 +33,7 @@ namespace Route.C41.MVC.PL.ViewModels
         public int? DepartmentId { get; set; }
 
         public Department Department { get; set; }
+        public IFormFile Image {  get; set; }
+        public string ImageName { get; set; }
     }
 }

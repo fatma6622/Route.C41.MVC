@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
 using Route.C41.MVC.BLL.Interfaces;
 using Route.C41.MVC.DAL.Models;
+using Route.C41.MVC.PL.Helpers;
 using Route.C41.MVC.PL.ViewModels;
 using System;
 using System.Collections;
@@ -60,6 +61,8 @@ namespace Route.C41.MVC.PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                employeeVM.ImageName= DocumentSettings.UploadFile(employeeVM.Image, "Images");
+
                 //manual mapping
                 //var mappedEmp = new Employee()
                 //{
@@ -74,7 +77,8 @@ namespace Route.C41.MVC.PL.Controllers
                 //};
                 //Employee mappedEmp =(Employee) employeeVM;
 
-                var mappedEmp= mapper.Map<EmployeeViewModel,Employee>(employeeVM);
+                var mappedEmp = mapper.Map<EmployeeViewModel,Employee>(employeeVM);
+                //mappedEmp.ImageName = fileName;
 
                  _unitOfWork.Repo<Employee>().Add(mappedEmp);
 

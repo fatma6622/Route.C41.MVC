@@ -8,20 +8,21 @@ using System.Threading.Tasks;
 
 namespace Route.C41.MVC.DAL.Models
 {
+    public enum gender
+    {
+        [EnumMember(Value = "Male")]
+        male = 1,
+        [EnumMember(Value = "Female")]
+        female = 2
+    }
+    public enum empType
+    {
+        fullTime = 1,
+        partTime = 2
+    }
     public class Employee:ModelBase
     {
-        public enum gender
-        {
-            [EnumMember(Value ="Male")]
-            male=1,
-            [EnumMember(Value = "Female")]
-            female = 2
-        }
-        public enum empType
-        {
-            fullTime=1,
-            partTime=2
-        }
+        public string ImageName {  get; set; }
         public string Name { get; set; }
         public int? Age { get; set; }
         public string Address { get; set; }
