@@ -9,7 +9,7 @@
 <br />
 
 
-<form action="/Employee/Create" method="post" enctype="multipart/form-data">
+<form asp-action="create" enctype="multipart/form-data">
     <partial name="shared/CreateEditEmployeePartial"></partial>
     <input type="submit" value="Create" class="btn btn-primary" />|
     <a asp-action="Index" class="btn btn-light">Back To List</a>

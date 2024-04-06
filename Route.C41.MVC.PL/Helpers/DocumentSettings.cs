@@ -13,7 +13,7 @@ namespace Route.C41.MVC.PL.Helpers
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files", FolderName);
             if(!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
-            string fileName=$"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+            string fileName=$"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             string filePath=Path.Combine(folderPath, fileName);
             using var fileStream = new FileStream(filePath, FileMode.Create);
             file.CopyTo(fileStream);
