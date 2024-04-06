@@ -106,7 +106,8 @@ namespace Route.C41.MVC.PL.Controllers
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
             if (employee == null)
                 return NotFound();
-
+            if(view.Equals("delete",StringComparison.OrdinalIgnoreCase))
+                TempData["ImageName"] = employee.ImageName;
             return View(view, mappedEmp);
         }
         [HttpGet]
@@ -156,10 +157,16 @@ namespace Route.C41.MVC.PL.Controllers
             //    return BadRequest();
             try
             {
+                employeeVM.ImageName = TempData["ImageName"] as string;
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 _unitOfWork.Repo<Employee>().Delete(mappedEmp);
-                _unitOfWork.complete();
-                return RedirectToAction("Index");
+                var count=_unitOfWork.complete();
+                if (count > 0)
+                {
+                    DocumentSettings.DeleteFile(employeeVM.ImageName, "Images");
+                    return RedirectToAction("Index");
+                }
+                return View(employeeVM);
             }
             catch (Exception ex)
             {
