@@ -9,6 +9,9 @@
 <br />
 
 <form action="/Employee/Create" method="post">
+    <div>
+        <img src="~/Files/Images/@Model.ImageName" width="75" class="img-fluid rounded-circle" alt="Employee Image"/>
+    </div>
     <div class="form-group">
         <label class="col-form-label" asp-for="Name"></label>
         <input asp-for="Name" class="form-control" readonly />
@@ -26,7 +29,7 @@
         <input asp-for="Email" class="form-control" readonly />
     </div>
     <div class="form-group">
-        <label class="col-form-label" asp-for="gen"></label>
+        <label class="col-form-label" >Gender</label>
         <input asp-for="gen" class="form-control" readonly />
     </div>
     <div class="form-group">

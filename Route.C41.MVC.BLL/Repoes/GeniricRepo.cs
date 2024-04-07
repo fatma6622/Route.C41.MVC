@@ -19,39 +19,36 @@ namespace Route.C41.MVC.BLL.repoes
             this.dbContext = dbContext;
         }
 
-        public int Add(T entity)
+        public void Add(T entity)
         {
-            dbContext.Set<T>().Add(entity);
-            return dbContext.SaveChanges();
+            dbContext.Set<T>().AddAsync(entity);
         }
 
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             dbContext.Set<T>().Remove(entity);
-            return dbContext.SaveChanges();
         }
 
-        public T Get(int Id)
+        public async Task<T> GetAsync(int Id)
         {
-            return dbContext.Find<T>(Id); ;
+            return await dbContext.FindAsync<T>(Id); ;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             if (typeof(T) == typeof(Employee))
             {
-                return (IEnumerable<T>) dbContext.Employees.Include(e=>e.Department).ToList();
+                return (IEnumerable<T>) await dbContext.Employees.Include(e=>e.Department).ToListAsync();
             }
             else
             {
-                return dbContext.Set<T>().AsNoTracking().ToList();
+                return await dbContext.Set<T>().AsNoTracking().ToListAsync();
             }
         }
 
-        public int Update(T entity)
+        public void Update(T entity)
         {
             dbContext.Set<T>().Update(entity);
-            return dbContext.SaveChanges();
         }
     }
 }

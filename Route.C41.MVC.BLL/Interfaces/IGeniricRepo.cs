@@ -9,11 +9,11 @@ namespace Route.C41.MVC.BLL.IGeniricRepo
 {
     public interface IGeniricRepo<T> where T : ModelBase
     {
-        IEnumerable<T> GetAll();
-        T Get(int Id);
-        int Update(T entity);
-        int Delete(T entity);
-        int Add(T entity);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetAsync(int Id);
+        void Update(T entity);
+        void Delete(T entity);
+        void Add(T entity);
 
     }
 }

@@ -3,29 +3,36 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.MVC.BLL.IGeniricRepo;
+using Route.C41.MVC.BLL.Interfaces;
 using Route.C41.MVC.DAL.Models;
 using Route.C41.MVC.PL.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Route.C41.MVC.PL.Controllers
 {
     public class DepartmentController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IDepartmentRepo _departmentRepo;
+        private readonly IUnitOfWork _unitOfWork;
+
+        //private readonly IDepartmentRepo _departmentRepo;
 
         public IWebHostEnvironment Env { get; }
 
-        public DepartmentController(IMapper mapper, IDepartmentRepo departmentRepo,IWebHostEnvironment env)
+        public DepartmentController(IMapper mapper, 
+            IUnitOfWork unitOfWork
+            ,IWebHostEnvironment env)
         {
             this.mapper = mapper;
-            _departmentRepo =departmentRepo;
+            _unitOfWork = unitOfWork;
+            //_departmentRepo =departmentRepo;
             Env = env;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            var departments = _departmentRepo.GetAll();
+            var departments = await _unitOfWork.Repo<Department>().GetAllAsync();
             var mappedDepts = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
             return View(mappedDepts);
         }
@@ -36,12 +43,13 @@ namespace Route.C41.MVC.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(DepartmentViewModel departmentVM)
+        public async Task<IActionResult> CreateAsync(DepartmentViewModel departmentVM)
         {
             if(ModelState.IsValid)
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-                var count=_departmentRepo.Add(mappedDept);
+                _unitOfWork.Repo<Department>().Add(mappedDept);
+                var count = await _unitOfWork.complete();
                 if (count > 0)
                 {
                     TempData["massage"] = "created successfully";
@@ -50,17 +58,17 @@ namespace Route.C41.MVC.PL.Controllers
                 {
                     TempData["massage"] = "not created";
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
 
             }
             return View(departmentVM);
         }
         [HttpGet]
-        public IActionResult details(int? id, string view = "details")
+        public async Task<IActionResult> detailsAsync(int? id, string view = "details")
         {
             if (!id.HasValue)
                 return BadRequest();
-            var department=_departmentRepo.Get(id.Value);
+            var department= await _unitOfWork.Repo<Department>().GetAsync(id.Value);
             var mappedDept = mapper.Map<Department, DepartmentViewModel>(department);
 
             if (department==null)
@@ -69,14 +77,14 @@ namespace Route.C41.MVC.PL.Controllers
             return View(view, mappedDept);
         }
         [HttpGet]
-        public IActionResult edit(int? id)
+        public async Task<IActionResult> editAsync(int? id)
         {
 
-            return details(id, "edit");
+            return await detailsAsync(id, "edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult edit([FromRoute] int Id, DepartmentViewModel departmentVM)
+        public async Task<IActionResult> editAsync([FromRoute] int Id, DepartmentViewModel departmentVM)
         {
             if(Id!= departmentVM.Id)
                 return BadRequest();
@@ -86,7 +94,8 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _departmentRepo.Update(mappedDept);
+                _unitOfWork.Repo<Department>().Update(mappedDept);
+                await _unitOfWork.complete();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -103,13 +112,13 @@ namespace Route.C41.MVC.PL.Controllers
             }
         }
         [HttpGet]
-        public IActionResult delete(int? id)
+        public async Task<IActionResult> deleteAsync(int? id)
         {
 
-            return details(id, "delete");
+            return await detailsAsync(id, "delete");
         } 
         [HttpPost]
-        public IActionResult delete(DepartmentViewModel departmentVM)
+        public async Task<IActionResult> deleteAsync(DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -117,7 +126,8 @@ namespace Route.C41.MVC.PL.Controllers
             {
                 var mappedDept = mapper.Map<DepartmentViewModel, Department>(departmentVM);
 
-                _departmentRepo.Delete(mappedDept);
+                _unitOfWork.Repo<Department>().Delete(mappedDept);
+                await _unitOfWork.complete();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
