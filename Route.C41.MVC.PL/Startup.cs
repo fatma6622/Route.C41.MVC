@@ -60,6 +60,7 @@ namespace Route.C41.MVC.PL
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.User.RequireUniqueEmail = true;
 			}).AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddAuthentication();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

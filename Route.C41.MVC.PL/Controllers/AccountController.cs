@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Route.C41.MVC.DAL.Models;
-using Route.C41.MVC.PL.ViewModels.User;
+using Route.C41.MVC.PL.ViewModels.Account;
 using System.Threading.Tasks;
 
 namespace Route.C41.MVC.PL.Controllers
@@ -53,6 +53,39 @@ namespace Route.C41.MVC.PL.Controllers
 		public IActionResult SignIn()
 		{
 			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> SignIn(SignInViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				var user =await _userManager.FindByEmailAsync(model.Email);
+				if (user is null)
+				{
+					var flag=await _userManager.CheckPasswordAsync(user,model.Password);
+					if (flag)
+					{
+						var result = await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
+						if (result.IsLockedOut)
+						{
+							ModelState.AddModelError(string.Empty, "Your Account is Locked!!");
+						}
+
+						if (result.Succeeded)
+						{
+							return RedirectToAction(nameof(HomeController.Index), "Home");
+						}
+						if (result.IsNotAllowed)
+						{
+							ModelState.AddModelError(string.Empty, "Your Account is not Confiemed yet!!");
+						}
+
+					}
+
+				}
+				ModelState.AddModelError(string.Empty, "Invalid Login");
+			}
+			return View(model);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 
-namespace Route.C41.MVC.PL.ViewModels.User
+namespace Route.C41.MVC.PL.ViewModels.Account
 {
 	public class SignUpViewModel
 	{
