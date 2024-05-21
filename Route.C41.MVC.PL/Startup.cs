@@ -60,7 +60,25 @@ namespace Route.C41.MVC.PL
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.User.RequireUniqueEmail = true;
 			}).AddEntityFrameworkStores<ApplicationDbContext>();
-            //services.AddAuthentication();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Acount/SignIn";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.AccessDeniedPath = "/Home/Error";
+
+            });
+            //services.AddAuthentication("Hamada");
+            services.AddAuthentication(options =>
+            {
+                //options.DefaultAuthenticateScheme = "Hamada";
+            }).AddCookie("Hamada", options =>
+            {
+				options.LoginPath = "/Acount/SignIn";
+				options.ExpireTimeSpan = TimeSpan.FromDays(1);
+				options.AccessDeniedPath = "/Home/Error";
+			});
+
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +105,7 @@ namespace Route.C41.MVC.PL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=SignIn}/{id?}");
             });
         }
     }
