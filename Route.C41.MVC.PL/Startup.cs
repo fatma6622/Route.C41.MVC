@@ -59,7 +59,7 @@ namespace Route.C41.MVC.PL
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.User.RequireUniqueEmail = true;
-			}).AddEntityFrameworkStores<ApplicationDbContext>();
+			}).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {
